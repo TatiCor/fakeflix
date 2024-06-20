@@ -1,0 +1,38 @@
+:root {
+    --background-dark: #18122B;
+    --purple: #393053;
+    --purple-100: #443C68;
+    --purple-80: #635985;
+    --white: #c5c5c5;
+}
+
+* {
+    background-color: #18122B;
+    color: var(--white);
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.trendingPreview-movieList {
+    display: flex;
+    padding: 24px;
+    overflow-x: auto;
+    scrollbar-width: thin; /* Ancho del scrollbar (puede ser 'thin', 'auto', o 'none') */
+    scrollbar-color: var(--purple) var(--background-dark); /* Color del scrollbar */
+    white-space: nowrap;
+    width: 100%;
+}
+
+.movie-container{ 
+    height: auto;
+    width: 300px;
+    margin: 12px;
+}
+
+.movie-img {
+    height: 280px;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 8px;
+}
