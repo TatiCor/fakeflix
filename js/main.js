@@ -16,9 +16,9 @@ const api = axios.create({
 
 const getTrendingMoviesPreview = async () => {
     try {
-        trendingPreviewList.innerHTML = "";
+        trendingPreviewList.textContent = "";
         const {data} = await api.get(`/trending/movie/week`);
-        console.log("pelis " , data);
+        console.log("pelis " , data.results);
         const movies = data.results
 
         movies.forEach(movie => {
@@ -30,7 +30,7 @@ const getTrendingMoviesPreview = async () => {
             movieImg.setAttribute('alt', movie.title);
             movieImg.setAttribute(
                 'src', 
-                `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+                `https://image.tmdb.org/t/p/w300${movie.poster_path}`
             )
 
             movieContainer.appendChild(movieImg)
@@ -46,7 +46,7 @@ const getTrendingMoviesPreview = async () => {
 
 const getCategoriesPreview = async() => {
     try {
-        categoriesPreviewList.innerHTML = "" // limpio container para evitar duplicación de contenido
+        categoriesPreviewList.textContent = "" // limpio container para evitar duplicación de contenido
         const {data} = await api.get(`/genre/movie/list`);
         const categories = data.genres
         
@@ -61,8 +61,9 @@ const getCategoriesPreview = async() => {
             categoryTitle.setAttribute('id', category.id)
             const categoryTextTitle = document.createTextNode(category.name)
             categoryTitle.addEventListener('click', () => {
-                const ubicación = location.hash = `category=${category.id}-${category.name}`
-                console.log(ubicación, "location");
+                const categoryName = category.name
+                const ubicacion = location.hash = `category=${category.id}-${categoryName.toLowerCase()}`
+                console.log(ubicacion, "location");
                 
             })
 
@@ -83,10 +84,28 @@ const getMoviesByCategory = async (id) => {
                 with_genres: id
             }
         });
-        const categories = data.genres
+        const movies = data.results;
+        genericListSection.textContent = ''
 
+        movies.forEach((movie) => {
+            const movieContainer = document.createElement('div');
+            const movieImg = document.createElement('img');
+
+            movieContainer.classList.add('movie-container');
+            movieImg.classList.add('movie-img');
+            movieImg.setAttribute('alt', movie.title)
+            movieImg.setAttribute(
+                'src',
+                `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
+            )
+
+            movieContainer.appendChild(movieImg);
+            genericListSection.appendChild(movieContainer);
+            
+        })
+        console.log("movies" , movies);
         
     } catch (error) {
-        throw new Error ('Error categoría no encontrada.' + error.message);
+        throw new Error ('Error, no disponible momentáneamente.' + error.message);
     }
 } 

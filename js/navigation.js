@@ -58,9 +58,15 @@ const categoriesPage = () => {
     genericListSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
 
-    const url = location.hash.split('='); // [category, id-name]
-    url
-    console.log('categories');
+    const url = location.hash.split('=') // [category, id-name]
+    const [_, categoryData] = url;
+    const [categoryId, categoryName] = categoryData.split('-')
+    const newName = categoryName.replace('%20', '');
+    headerCategoryTitle.textContent = newName;
+    
+    getMoviesByCategory(categoryId);
+    
+    console.log('categories', categoryId, categoryName);
 }
 
 const movieDetailsPage = () => {
