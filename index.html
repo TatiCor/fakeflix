@@ -8,24 +8,60 @@
 </head>
 <body>
     <header id="header" class="header-container">
-        <h1>Fakeflix</h1>
-        <p>aca va el header</p>
+        <span class="header-arrow inactive">arrow </span>
+        <h1 class="header-title">Fakeflix</h1>
+        <h1 class="header-title header-title--categoryView">Acción</h1>
+        <div id="searchBar" class="header-searchBar">
+            <input type="text" placeholder="Vengadores">
+            <button id="searchBtn">buscar</button>
+        </div>
     </header>
-    <section id="trendingPreview">
+
+    <section id="trendingPreview" class="trendingPreview-container">
+        <div class="trendingPreview-header">
+            <h2 class="trendingPreview-title">Tendencias</h2>
+            <button class="trendingPreview-btn">Ver más</button>
+        </div>
         <article class="trendingPreview-movieList">
-            <div class="carrousel">
+            <!-- para hacer carrousel a futuro  <div class="carrousel">
                 <div class="carrousel-inner">
 
                 </div>
-            </div>
+            </div> -->
         </article>
+    
     </section>
-    <section id="categoriesPreview">
+
+    <section id="categoriesPreview" class="categoriesPreview-container">
+        <h2 class="categoriesPreview-title">Categorías</h2>
         <article class="categoriesPreviewList">
             
         </article>
     </section>
-    <section id="categoriesPreview"></section>
-    <script src="./js/script.js"></script>
+
+    <section id="genericList" class="genericList-container inactive">
+        <div><p>soy la lista generica</p></div>
+    </section>
+
+    <section id="movieDetail" class="movieDetail-container inactive">
+        <h2 class="movieDetail-title">Title peli</h2>
+        <span class="movieDetail-score">7.6</span>
+        <p class="movieDetail-description">una peli re graciosa</p>
+
+        <article class="categories-list"></article>
+    </section>
+    <section class="relatedMovies-scrollContainer"></section>
+
+    <footer>Hecho con 💚</footer>
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./js/nodes.js"></script>
+    <script src="./js/navigation.js"></script>        
+    <script src="./js/main.js"></script>
+
 </body>
 </html>

@@ -1,19 +1,27 @@
-
-
 const API_KEY = "5ad81eac7b8af6924569c3335052e504"
 const token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YWQ4MWVhYzdiOGFmNjkyNDU2OWMzMzM1MDUyZTUwNCIsInN1YiI6IjY2NzFjZjJjMmFlMDU4ZmMwOTBlMDNlYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.tItOaiHUKvKfdp4FKoaG_u2Xn3LWuFqYzRlIsKpz2cE'
 
-console.log('Holi practiquemos apis')
+console.log('Practico APIs. Fin.')
+const api = axios.create({
+    baseURL: 'https://api.themoviedb.org/3',
+    params: {
+        'api_key': API_KEY
+    },
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+        }
+})
 
 
-const getTrendingMovies = async () => {
+const getTrendingMoviesPreview = async () => {
     try {
-        const res = await fetch(`https://api.themoviedb.org/3/trending/movie/week?api_key=${API_KEY}`);
-        const data = await res.json();
+        trendingPreviewList.innerHTML = "";
+        const {data} = await api.get(`/trending/movie/week`);
+        console.log("pelis " , data);
         const movies = data.results
 
         movies.forEach(movie => {
-            const trendingPreviewContainer = document.querySelector('#trendingPreview .trendingPreview-movieList');
             const movieContainer = document.createElement('div');
             movieContainer.classList.add('movie-container')
 
@@ -26,7 +34,7 @@ const getTrendingMovies = async () => {
             )
 
             movieContainer.appendChild(movieImg)
-            trendingPreviewContainer.appendChild(movieContainer)
+            trendingPreviewList.appendChild(movieContainer)
         });
         
         console.log("tendencias ", movies);
@@ -34,19 +42,17 @@ const getTrendingMovies = async () => {
         console.error("error en la petición", e.message)
     }
 } 
-getTrendingMovies()
+
 
 const getCategoriesPreview = async() => {
     try {
-        const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}`)
-        const data =  await res.json();
+        categoriesPreviewList.innerHTML = "" // limpio container para evitar duplicación de contenido
+        const {data} = await api.get(`/genre/movie/list`);
         const categories = data.genres
         
         console.log("categorias ", categories);
 
-        categories.forEach(category => {
-            const previewCategoriesContainer = document.querySelector('#categoriesPreview .categoriesPreviewList');
-            
+        categories.forEach(category => {            
             const categoryContainer = document.createElement('div');
             categoryContainer.classList.add('category-container');
 
@@ -54,15 +60,33 @@ const getCategoriesPreview = async() => {
             categoryTitle.classList.add('category-title')
             categoryTitle.setAttribute('id', category.id)
             const categoryTextTitle = document.createTextNode(category.name)
+            categoryTitle.addEventListener('click', () => {
+                const ubicación = location.hash = `category=${category.id}-${category.name}`
+                console.log(ubicación, "location");
+                
+            })
 
             categoryTitle.appendChild(categoryTextTitle)
             categoryContainer.appendChild(categoryTitle)
-            previewCategoriesContainer.appendChild(categoryContainer)
+            categoriesPreviewList.appendChild(categoryContainer)
         });
 
     } catch (error) {
-        throw new error ('Error categorías no disponible.' + error.message)
+        throw new Error ('Error categorías no disponible.' + error.message);
     }
 }
 
-getCategoriesPreview()
+const getMoviesByCategory = async (id) => {
+    try {
+        const {data} = await api.get(`/discover/movie`, {
+            params: {
+                with_genres: id
+            }
+        });
+        const categories = data.genres
+
+        
+    } catch (error) {
+        throw new Error ('Error categoría no encontrada.' + error.message);
+    }
+} 
