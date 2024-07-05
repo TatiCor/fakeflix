@@ -13,99 +13,81 @@ const api = axios.create({
         }
 })
 
+// Helpers 
+
+const createMovies = (movies, container) => {
+    container.innerHTML = "";
+
+    movies.forEach(movie => {
+        const movieContainer = document.createElement('div');
+        movieContainer.classList.add('movie-container')
+
+        const movieImg = document.createElement('img');
+        movieImg.classList.add('movie-img');
+        movieImg.setAttribute('alt', movie.title);
+        movieImg.setAttribute(
+            'src', 
+            `https://image.tmdb.org/t/p/w300${movie.poster_path}`
+        )
+
+        movieContainer.appendChild(movieImg)
+        container.appendChild(movieContainer)
+    });
+};
+
+const createCategories = (categories, container) => {
+    container.innerHTML = "";
+
+    categories.forEach(category => {            
+        const categoryContainer = document.createElement('div');
+        categoryContainer.classList.add('category-container');
+
+        const categoryTitle = document.createElement('h3');
+        categoryTitle.classList.add('category-title')
+        categoryTitle.setAttribute('id', category.id)
+        const categoryTextTitle = document.createTextNode(category.name)
+        categoryTitle.addEventListener('click', () => {
+            const categoryName = category.name
+            const ubicacion = location.hash = `category=${category.id}-${categoryName.toLowerCase()}`
+            console.log(ubicacion, "location");
+            
+        })
+
+        categoryTitle.appendChild(categoryTextTitle)
+        categoryContainer.appendChild(categoryTitle)
+        container.appendChild(categoryContainer)
+    });
+};
+
+const fetchData = async(url) => {
+    try {
+        const response = await api.get(url);
+        return response;
+    } catch (error) {
+        throw new Error (`Error en la petición ${error.message}`)
+    }
+}
 
 const getTrendingMoviesPreview = async () => {
-    try {
-        trendingPreviewList.textContent = "";
-        const {data} = await api.get(`/trending/movie/week`);
-        console.log("pelis " , data.results);
-        const movies = data.results
-
-        movies.forEach(movie => {
-            const movieContainer = document.createElement('div');
-            movieContainer.classList.add('movie-container')
-
-            const movieImg = document.createElement('img');
-            movieImg.classList.add('movie-img');
-            movieImg.setAttribute('alt', movie.title);
-            movieImg.setAttribute(
-                'src', 
-                `https://image.tmdb.org/t/p/w300${movie.poster_path}`
-            )
-
-            movieContainer.appendChild(movieImg)
-            trendingPreviewList.appendChild(movieContainer)
-        });
-        
-        console.log("tendencias ", movies);
-    } catch(e) {
-        console.error("error en la petición", e.message)
-    }
+        const {data} = await fetchData(`/trending/movie/week`);
+        const movies = data.results;
+        createMovies(movies, trendingPreviewList )
 } 
 
 
 const getCategoriesPreview = async() => {
-    try {
-        categoriesPreviewList.textContent = "" // limpio container para evitar duplicación de contenido
-        const {data} = await api.get(`/genre/movie/list`);
-        const categories = data.genres
-        
-        console.log("categorias ", categories);
-
-        categories.forEach(category => {            
-            const categoryContainer = document.createElement('div');
-            categoryContainer.classList.add('category-container');
-
-            const categoryTitle = document.createElement('h3');
-            categoryTitle.classList.add('category-title')
-            categoryTitle.setAttribute('id', category.id)
-            const categoryTextTitle = document.createTextNode(category.name)
-            categoryTitle.addEventListener('click', () => {
-                const categoryName = category.name
-                const ubicacion = location.hash = `category=${category.id}-${categoryName.toLowerCase()}`
-                console.log(ubicacion, "location");
-                
-            })
-
-            categoryTitle.appendChild(categoryTextTitle)
-            categoryContainer.appendChild(categoryTitle)
-            categoriesPreviewList.appendChild(categoryContainer)
-        });
-
-    } catch (error) {
-        throw new Error ('Error categorías no disponible.' + error.message);
-    }
+    const {data} = await fetchData(`/genre/movie/list`);
+    const categories = data.genres
+    createCategories(categories, categoriesPreviewList);
+       // categoriesPreviewList para usar mas adelante
 }
 
 const getMoviesByCategory = async (id) => {
-    try {
         const {data} = await api.get(`/discover/movie`, {
             params: {
                 with_genres: id
             }
         });
         const movies = data.results;
-        genericListSection.textContent = ''
-
-        movies.forEach((movie) => {
-            const movieContainer = document.createElement('div');
-            const movieImg = document.createElement('img');
-
-            movieContainer.classList.add('movie-container');
-            movieImg.classList.add('movie-img');
-            movieImg.setAttribute('alt', movie.title)
-            movieImg.setAttribute(
-                'src',
-                `https://image.tmdb.org/t/p/w300/${movie.poster_path}`
-            )
-
-            movieContainer.appendChild(movieImg);
-            genericListSection.appendChild(movieContainer);
-            
-        })
-        console.log("movies" , movies);
-        
-    } catch (error) {
-        throw new Error ('Error, no disponible momentáneamente.' + error.message);
-    }
+        createMovies(movies, genericListSection);
 } 

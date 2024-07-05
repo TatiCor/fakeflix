@@ -24,6 +24,8 @@ const navigatior = () => {
     } else {
         homePage();
     }
+
+    window.scrollTo(0,0); // para subir el escroll 
 }
 
 const homePage = () => {
@@ -61,7 +63,7 @@ const categoriesPage = () => {
     const url = location.hash.split('=') // [category, id-name]
     const [_, categoryData] = url;
     const [categoryId, categoryName] = categoryData.split('-')
-    const newName = categoryName.replace('%20', '');
+    const newName = categoryName.replace('%20', ' ');
     headerCategoryTitle.textContent = newName;
     
     getMoviesByCategory(categoryId);
