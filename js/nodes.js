@@ -1,4 +1,4 @@
-const selector = (element) =>  document.querySelector(element);
+const selector = (element) => document.querySelector(element);
 
 // Sections 
 const headerSection = selector('#header');

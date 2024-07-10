@@ -14,13 +14,15 @@ const api = axios.create({
 })
 
 // Helpers 
-
 const createMovies = (movies, container) => {
     container.innerHTML = "";
 
     movies.forEach(movie => {
         const movieContainer = document.createElement('div');
         movieContainer.classList.add('movie-container')
+        movieContainer.addEventListener('click', ()=> {
+            location.hash = `#movie=${movie.id}`
+        })
 
         const movieImg = document.createElement('img');
         movieImg.classList.add('movie-img');
@@ -29,7 +31,6 @@ const createMovies = (movies, container) => {
             'src', 
             `https://image.tmdb.org/t/p/w300${movie.poster_path}`
         )
-
         movieContainer.appendChild(movieImg)
         container.appendChild(movieContainer)
     });
@@ -66,13 +67,13 @@ const fetchData = async(url) => {
     } catch (error) {
         throw new Error (`Error en la petición ${error.message}`)
     }
-}
+};
 
 const getTrendingMoviesPreview = async () => {
         const {data} = await fetchData(`/trending/movie/week`);
         const movies = data.results;
-        createMovies(movies, trendingPreviewList )
-} 
+        createMovies(movies, trendingPreviewList);
+}; 
 
 
 const getCategoriesPreview = async() => {
@@ -80,7 +81,7 @@ const getCategoriesPreview = async() => {
     const categories = data.genres
     createCategories(categories, categoriesPreviewList);
        // categoriesPreviewList para usar mas adelante
-}
+};
 
 const getMoviesByCategory = async (id) => {
         const {data} = await api.get(`/discover/movie`, {
@@ -90,4 +91,36 @@ const getMoviesByCategory = async (id) => {
         });
         const movies = data.results;
         createMovies(movies, genericListSection);
-} 
+};
+
+const getMoviesBySearch = async (query) => {
+    const {data} = await api.get(`/search/movie`, {
+        params: {
+            query
+        }
+    });
+    const movies = data.results;
+    createMovies(movies, genericListSection);
+};
+
+const getTrendingMovies = async() => {
+    const {data} = await fetchData(`/trending/movie/week`);
+    const movies = data.results
+    createMovies(movies, genericListSection);
+}
+
+const getMovieById = async(id) => {
+    const { data: movie } = await fetchData(`/movie/${id}`);
+    const movieImageURL = `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    headerSection.style.background = `
+        url(${movieImageURL})
+        
+        `
+    console.log(movie);
+    movieDetailTitle.textContent = movie.title
+    movieDetailDescription.textContent = movie.overview
+    movieDetailScore.textContent = movie.vote_average
+
+    createCategories(movie.genres, movieDetailCategoriesList)
+
+}

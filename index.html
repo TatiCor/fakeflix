@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles/app.css">
     <title>Fakeflix</title>
 </head>
 <body>
     <header id="header" class="header-container">
-        <span class="header-arrow inactive">arrow </span>
+        <span class="header-arrow inactive">
+            <img src="./assets/arrow-circle-left-svgrepo-com.svg" alt="go-back">
+        </span>
         <h1 class="header-title">Fakeflix</h1>
-        <h1 class="header-title header-title--categoryView">Acción</h1>
+        <h1 class="header-title header-title--categoryView"></h1>
+        
         <div id="searchBar" class="header-searchBar">
             <input type="text" placeholder="Vengadores">
             <button id="searchBtn">buscar</button>
@@ -40,15 +46,17 @@
     </section>
 
     <section id="genericList" class="genericList-container inactive">
-        <div><p>soy la lista generica</p></div>
+
     </section>
 
     <section id="movieDetail" class="movieDetail-container inactive">
-        <h2 class="movieDetail-title">Title peli</h2>
-        <span class="movieDetail-score">7.6</span>
-        <p class="movieDetail-description">una peli re graciosa</p>
+        <h2 class="movieDetail-title"></h2>
+        <span class="movieDetail-score"></span>
+        <p class="movieDetail-description"></p>
 
-        <article class="categories-list"></article>
+        <article class="categories-list">
+            <div class="category-container"> </div>
+        </article>
     </section>
     <section class="relatedMovies-scrollContainer"></section>
 
