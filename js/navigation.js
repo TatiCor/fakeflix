@@ -14,7 +14,6 @@ arrowBtn.addEventListener('click', () => {
     window.history.back();
 });
 
-
 // Navigation fx
 const navigator = () => {
     // leer hash
