@@ -14,9 +14,10 @@ const api = axios.create({
 })
 
 // Helpers
+// Intersection Observer 
 let lazyLoading = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
-        console.log("Observador: ", entry.target);
+        /* console.log("Observador: ", entry.target); */
         
         if (entry.isIntersecting) {
             const img = entry.target
@@ -27,8 +28,15 @@ let lazyLoading = new IntersectionObserver((entries, observer) => {
     })
 });
 
-const createMovies = (movies, container, lazyLoad = false) => {
-    container.innerHTML = "";
+const createMovies = (
+    movies, container, {
+    lazyLoad = false, 
+    clean = true } 
+    = {},
+) => {
+    if (clean) {
+        container.innerHTML = "";
+    }
 
     movies.forEach(movie => {
         const movieContainer = document.createElement('div');
@@ -42,13 +50,13 @@ const createMovies = (movies, container, lazyLoad = false) => {
         movieImg.setAttribute('alt', movie.title);
         movieImg.setAttribute(
             lazyLoad ? 'data-img' : 'src', 
-            `https://image.tmdb.org/t/p/w300${movie.posster_path}`
+            `https://image.tmdb.org/t/p/w300${movie.poster_path}`
         );
 
         movieImg.addEventListener('error', () => {
             movieImg.setAttribute(
                 'src', 
-                'https://png.pngtree.com/png-vector/20210604/ourmid/pngtree-gray-network-placeholder-png-image_3416659.jpg'
+                '../assets/file-not-found.jpg'
             );
             const movieTitle = document.createElement('h3');
             movieTitle.classList.add('placeholderImg')
@@ -105,7 +113,7 @@ const fetchData = async(url) => {
 const getTrendingMoviesPreview = async () => {
         const {data} = await fetchData(`/trending/movie/week`);
         const movies = data.results;
-        createMovies(movies, trendingPreviewList, true);
+        createMovies(movies, trendingPreviewList, {lazyLoad: true});
 }; 
 
 
@@ -123,7 +131,7 @@ const getMoviesByCategory = async (id) => {
             }
         });
         const movies = data.results;
-        createMovies(movies, genericListSection, true);
+        createMovies(movies, genericListSection, {lazyLoad: true});
 };
 
 const getMoviesBySearch = async (query) => {
@@ -133,13 +141,37 @@ const getMoviesBySearch = async (query) => {
         }
     });
     const movies = data.results;
-    createMovies(movies, genericListSection, true);
+    createMovies(movies, genericListSection,{lazyLoad: true});
 };
 
 const getTrendingMovies = async() => {
     const {data} = await fetchData(`/trending/movie/week`);
     const movies = data.results
-    createMovies(movies, genericListSection, true);
+    createMovies(movies, genericListSection, {lazyLoad: true});
+
+    window.addEventListener('scroll', handleInfiniteScroll)
+
+}
+
+const getPaginatedTrendingMovies = async () => {
+    page++
+    const {data} = await api(`/trending/movie/week`, {
+        params: {
+            page,
+        },
+    });
+    const movies = data.results
+    createMovies(movies, genericListSection, {lazyLoad: true, clean: false});
+}
+
+const handleInfiniteScroll = async() => {
+    const scrollIsBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100
+    if (scrollIsBottom) {
+        window.removeEventListener('scroll', handleInfiniteScroll);
+        console.log("scroll bottom");
+        await getPaginatedTrendingMovies();
+        window.addEventListener('scroll', handleInfiniteScroll);
+    }
 }
 
 const getMovieById = async(id) => {
@@ -167,7 +199,7 @@ const getRelatedMoviesById = async(id) => {
     const { data } = await fetchData(`/movie/${id}/similar`);
     const relatedMovies = data.results;
     console.log(relatedMovies, "relacionadas");
-    createMovies(relatedMovies, relatedMoviesContainer, true)
+    createMovies(relatedMovies, relatedMoviesContainer, {lazyLoad: true})
 }
 
 

@@ -1,3 +1,4 @@
+let page = 1;
 // Event Listeners
 searchBtn.addEventListener('click' , () => {
     const value = searchFormInput.value.trim();
@@ -36,6 +37,7 @@ const navigator = () => {
 // Event listener for page load and hash change
 window.addEventListener('hashchange', navigator, false);
 window.addEventListener('DOMContentLoaded', navigator, false);
+/* window.addEventListener('scroll', handleInfiniteScroll) debo optimizar para que llame a cada url para hacer scroll infinito*/
 
 // Page Handlers
 const homePage = () => {

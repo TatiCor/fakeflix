@@ -173,10 +173,12 @@ h3 {
 .movie-img {
     min-height: 280px;
     height: 280px;
-    object-fit: contain;
+    width: 186.66px;
+    object-fit: cover;
     object-position: center;
     background-repeat: no-repeat;
     border-radius: 8px;
+    margin: 12px;
 }
 
 .categoriesPreviewList {
@@ -286,7 +288,7 @@ h3 {
     position: relative;
     text-align: center;
     height: auto;
-    width: 280px;
+    width: 200px;
     background-color: transparent;
     overflow: hidden;
 }
