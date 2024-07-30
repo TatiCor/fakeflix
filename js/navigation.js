@@ -1,4 +1,7 @@
+let maxPage;
 let page = 1;
+let infiniteScroll;
+
 // Event Listeners
 searchBtn.addEventListener('click' , () => {
     const value = searchFormInput.value.trim();
@@ -17,6 +20,11 @@ arrowBtn.addEventListener('click', () => {
 
 // Navigation fx
 const navigator = () => {
+    if (infiniteScroll) {
+        window.removeEventListener('scroll', infiniteScroll);
+        infiniteScroll = undefined;
+    }
+
     // leer hash
     console.log( { location }, 'location object');
     if (location.hash.startsWith('#trends')) {
@@ -31,13 +39,18 @@ const navigator = () => {
         homePage();
     }
 
+    document.body.scrollTop = 0;
     window.scrollTo(0,0); // para subir el escroll 
+
+    if (infiniteScroll) {
+        window.addEventListener('scroll', infiniteScroll)
+    }
 }
 
 // Event listener for page load and hash change
 window.addEventListener('hashchange', navigator, false);
 window.addEventListener('DOMContentLoaded', navigator, false);
-/* window.addEventListener('scroll', handleInfiniteScroll) debo optimizar para que llame a cada url para hacer scroll infinito*/
+
 
 // Page Handlers
 const homePage = () => {
@@ -79,6 +92,7 @@ const categoriesPage = () => {
     headerCategoryTitle.textContent = newName;
     
     getMoviesByCategory(categoryId);
+    infiniteScroll = handleInfiniteScroll(`/discover/movie?with_genres=${categoryId}`, genericListSection, {lazyLoad: true});
     
     console.log('categories', categoryId, categoryName);
 }
@@ -119,7 +133,8 @@ const searchPage = () => {
     movieDetailSection.classList.add('inactive');
     
     const [_, query] = location.hash.split('=');
-    getMoviesBySearch(query);
+    getMoviesBySearch(query, page);
+    infiniteScroll = handleInfiniteScroll(`/search/movie?query=${query}`, genericListSection, {lazyLoad: true})
 }
 
 const trendsPage = () => {
@@ -138,5 +153,6 @@ const trendsPage = () => {
 
     getTrendingMovies();
     console.log('estas viendo tendencias');
+    infiniteScroll = handleInfiniteScroll(`/trending/movie/week`, genericListSection, { lazyLoad: true });
 }
 

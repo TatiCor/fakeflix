@@ -286,11 +286,13 @@ h3 {
 
 .placeholderImg {
     position: relative;
+    bottom: 85px;
     text-align: center;
     height: auto;
-    width: 200px;
+    width: 100%;
     background-color: transparent;
     overflow: hidden;
+    color: var(--purple-100);
 }
 
 @keyframes skeleton-loading {

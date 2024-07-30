@@ -31,8 +31,8 @@ let lazyLoading = new IntersectionObserver((entries, observer) => {
 const createMovies = (
     movies, container, {
     lazyLoad = false, 
-    clean = true } 
-    = {},
+    clean = true  
+    } = {},
 ) => {
     if (clean) {
         container.innerHTML = "";
@@ -124,56 +124,69 @@ const getCategoriesPreview = async() => {
        // categoriesPreviewList para usar mas adelante
 };
 
-const getMoviesByCategory = async (id) => {
+const getMoviesByCategory = async (id, page = 1) => {
         const {data} = await api.get(`/discover/movie`, {
             params: {
-                with_genres: id
+                with_genres: id,
+                page
             }
         });
+        console.log(maxPage , "max page desde category");
         const movies = data.results;
         createMovies(movies, genericListSection, {lazyLoad: true});
+        maxPage = data.total_pages;
 };
 
-const getMoviesBySearch = async (query) => {
+const getMoviesBySearch = async (query, page = 1) => {
     const {data} = await api.get(`/search/movie`, {
         params: {
-            query
+            query,
+            page
         }
     });
+    
     const movies = data.results;
     createMovies(movies, genericListSection,{lazyLoad: true});
+    maxPage = data.total_pages;
 };
 
 const getTrendingMovies = async() => {
     const {data} = await fetchData(`/trending/movie/week`);
+    
+    maxPage = data.total_pages;
     const movies = data.results
     createMovies(movies, genericListSection, {lazyLoad: true});
-
-    window.addEventListener('scroll', handleInfiniteScroll)
-
 }
 
-const getPaginatedTrendingMovies = async () => {
-    page++
-    const {data} = await api(`/trending/movie/week`, {
-        params: {
-            page,
-        },
+const getPaginatedMovies = async (
+    url,
+    container,
+    options = {},
+    page = 1
+) => {
+    const { data } = await api(url, {
+        params: { page },
     });
-    const movies = data.results
-    createMovies(movies, genericListSection, {lazyLoad: true, clean: false});
+    console.log("data pages", data);
+    const movies = data.results;
+    createMovies(movies, container, { lazyLoad: true, clean: false });
 }
 
-const handleInfiniteScroll = async() => {
-    const scrollIsBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100
-    if (scrollIsBottom) {
-        window.removeEventListener('scroll', handleInfiniteScroll);
-        console.log("scroll bottom");
-        await getPaginatedTrendingMovies();
-        window.addEventListener('scroll', handleInfiniteScroll);
+const handleInfiniteScroll = (url, container, options) => {
+    return async () => {
+        const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+        const scrollIsBottom = scrollTop + clientHeight >= scrollHeight - 100;
+        const pageIsNotMax = page < maxPage;
+        
+        if (scrollIsBottom && pageIsNotMax) {
+            window.removeEventListener('scroll', infiniteScroll)
+            console.log("llego scroll bottom");
+            await getPaginatedMovies(url, container, options, page);
+            page++;
+            window.addEventListener('scroll', infiniteScroll, {passive: false});
+        }
     }
 }
-
 const getMovieById = async(id) => {
     const { data: movie } = await fetchData(`/movie/${id}`);
     const movieImageURL = `https://image.tmdb.org/t/p/w500${movie.poster_path}`
