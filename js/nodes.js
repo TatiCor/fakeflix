@@ -6,6 +6,7 @@ const trendingPreviewSection = selector('#trendingPreview');
 const categoriesPreviewSection = selector('#categoriesPreview');
 const genericListSection = selector('#genericList');
 const movieDetailSection = selector('#movieDetail');
+const likedMoviesSection = selector('#liked');
 
 // List & Containers
 const searchBar = selector('#searchBar');
@@ -13,6 +14,7 @@ const trendingPreviewList = selector('.trendingPreview-movieList');
 const categoriesPreviewList = selector('.categoriesPreviewList');
 const movieDetailCategoriesList = selector('#movieDetail .categories-list');
 const relatedMoviesContainer = selector('.relatedMovies-scrollContainer');
+const likedMoviesContainer = selector('.liked-movieList')
 
 // Elements
 const headerTitle = selector('.header-title');

@@ -65,9 +65,12 @@ const homePage = () => {
     categoriesPreviewSection.classList.remove('inactive');
     genericListSection.classList.add('inactive');
     movieDetailSection.classList.add('inactive');
+    likedMoviesSection.classList.remove('inactive');
 
-    getTrendingMoviesPreview()
-    getCategoriesPreview()
+    getTrendingMoviesPreview();
+    getCategoriesPreview();
+    getLikedMovies();
+    getLanguages();
     console.log("home");
 }
 
@@ -84,6 +87,8 @@ const categoriesPage = () => {
     categoriesPreviewSection.classList.add('inactive');
     genericListSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+
+    likedMoviesSection.classList.add('inactive');
 
     const url = location.hash.split('=') // [category, id-name]
     const [_, categoryData] = url;
@@ -108,6 +113,7 @@ const movieDetailsPage = () => {
     categoriesPreviewSection.classList.add('inactive');
     genericListSection.classList.add('inactive');
     movieDetailSection.classList.remove('inactive');
+    likedMoviesSection.classList.add('inactive');
 
     const url = location.hash.split('=');
     const [_, movieId] = url;
@@ -131,6 +137,7 @@ const searchPage = () => {
     categoriesPreviewSection.classList.add('inactive');
     genericListSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+    likedMoviesSection.classList.add('inactive');
     
     const [_, query] = location.hash.split('=');
     getMoviesBySearch(query, page);
@@ -148,6 +155,7 @@ const trendsPage = () => {
     categoriesPreviewSection.classList.add('inactive');
     genericListSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+    likedMoviesSection.classList.add('inactive');
 
     headerCategoryTitle.textContent = "Tendencias"
 
