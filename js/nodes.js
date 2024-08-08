@@ -15,6 +15,7 @@ const categoriesPreviewList = selector('.categoriesPreviewList');
 const movieDetailCategoriesList = selector('#movieDetail .categories-list');
 const relatedMoviesContainer = selector('.relatedMovies-scrollContainer');
 const likedMoviesContainer = selector('.liked-movieList')
+const languageContainer = selector('#languagesContainer')
 
 // Elements
 const headerTitle = selector('.header-title');
@@ -29,5 +30,4 @@ const trendingBtn = selector('.trendingPreview-btn');
 const movieDetailTitle = selector('.movieDetail-title');
 const movieDetailDescription = selector('.movieDetail-description');
 const movieDetailScore = selector('.movieDetail-score');
-
-
+const languageSelector = selector('#languageSelector')

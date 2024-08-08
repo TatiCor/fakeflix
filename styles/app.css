@@ -35,9 +35,23 @@ h3 {
     font-size: var(--tamaño-texto-normal);
 }
 
+.languagesContainer{ 
+    display: flex;
+    justify-content: end;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.languagesContainer .languageSelector{ 
+    padding: 8px;
+    border: none;
+    border: #635985 solid 1px;
+}
+
 .header-container, .categoriesPreview-header, .liked-header, .trendingPreview-header { 
     padding: 0 18px;
 }
+
 .header-container--long {
     position: fixed;
     top: 0;
@@ -55,6 +69,13 @@ h3 {
     font-size: var(--tamaño-title-xl);
 }
 
+.header-title img {
+    height: 70px;
+    width: 70px;
+
+    margin: 8px;
+}
+
 .header-title--categoryView {
     text-align: start;
     font-size: var(--tamaño-texto-grande);
@@ -65,12 +86,12 @@ h3 {
     margin: 8px;
     margin-bottom: 32px;
     text-align: center;
+    width: 100%;
 }
 
 .header-searchBar input {
     height: 38px;
-    min-width: 240px;
-    max-width: 400px; 
+    min-width: 208px;
     border: 1px solid var(--purple-80); 
     border-radius: 8px;
     padding: 8px;
@@ -79,6 +100,7 @@ h3 {
 
 .header-searchBar button {
     position: relative;
+    top: 15px;
     right: 12px;
     border: none;
     border-radius: 0 8px 8px 0;
@@ -89,27 +111,44 @@ h3 {
     cursor: pointer;
     transition: background-color 0.3s ease; 
 }
+
+.header-searchBar button img {
+    display: flex;
+    justify-content: center;
+    height: 24px;
+    width: 24px;
+    background: none;
+}
+
 .header-arrow {
     background-color: transparent;
 }
+
 .header-arrow img{
     background-color: transparent;
     height: 30px;
     width: 30px;
     margin: 12px;
 }
+
 .trendingPreview-header, .liked-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .trendingPreview-header .trendingPreview-btn {
+    height: 40px;
     border: none;
-    margin: 0 4px;
+    margin: 2px;
+    padding: 8px 12px;
     cursor: pointer;
     font-family: "Poppins", sans-serif;
     font-weight: 600;
+    border-radius: 12px;
+    border: #635985 solid 1px;
 }
+
 
 .trendingPreview-movieList, .liked-movieList {
     display: flex;
@@ -120,14 +159,20 @@ h3 {
     width: 100%;
 }
 
+.categoriesPreview-header {
+    margin-top: 32px;
+    width: 100%;
+}
+.categoriesPreview-title {
+    width: 100%;
+}
+
 .categoriesPreview-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 
-}
-.categoriesPreview-header {
-    margin-top: 32px;
 }
 
 .category-container {
@@ -322,3 +367,24 @@ h3 {
         background-position: 200% 0;
     }
 }
+
+@media (min-width: 700px) {
+    .categoriesPreviewList {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin: 12px 0px;
+        padding: 24px;
+        cursor: pointer;
+        max-width: 70%;
+    }
+
+    .header-searchBar input {
+        min-width: 380px;
+    }
+
+
+}
+
+

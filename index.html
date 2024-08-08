@@ -11,34 +11,42 @@
 </head>
 <body>
     <header id="header" class="header-container">
+        <div id="languagesContainer" class="languagesContainer">
+            <select id="languageSelector" class="languageSelector">
+                <option value="es-ES">Español</option>
+                <option value="en-US">English</option>
+            </select>
+        </div>
         <span class="header-arrow inactive">
             <img src="./assets/arrow-circle-left-svgrepo-com.svg" alt="go-back">
         </span>
-        <h1 class="header-title">Fakeflix</h1>
+        <h1 class="header-title"><img src="./assets/pelicula.png" alt="">FAKEFLIX</h1>
         <h1 class="header-title header-title--categoryView"></h1>
         
         <div id="searchBar" class="header-searchBar">
             <input type="text" placeholder="Vengadores">
-            <button id="searchBtn">buscar</button>
+            <button id="searchBtn"><img src="./assets/buscar (1).png" alt=""></button>
         </div>
     </header>
 
     <section id="trendingPreview" class="trendingPreview-container">
         <div class="trendingPreview-header">
             <h2 class="trendingPreview-title">Tendencias</h2>
-            <button class="trendingPreview-btn">Ver más</button>
+            <button class="trendingPreview-btn">Ver más <span></span></button>
         </div>
+        
         <article class="trendingPreview-movieList">
-            <!-- para hacer carrousel a futuro  <div class="carrousel">
-                <div class="carrousel-inner">
-
-                </div>
-            </div> -->
+            <div class="movie-container movie-container--loading"></div>
+            <div class="movie-container movie-container--loading"></div>
+            <div class="movie-container movie-container--loading"></div>
+            <div class="movie-container movie-container--loading"></div>
+            <div class="movie-container movie-container--loading"></div>
             <div class="movie-container movie-container--loading"></div>
             <div class="movie-container movie-container--loading"></div>
             <div class="movie-container movie-container--loading"></div>
             <div class="movie-container movie-container--loading"></div>
         </article>
+
     
     </section>
 
@@ -77,6 +85,11 @@
                 <div class="relatedMovies--loading"></div>
                 <div class="relatedMovies--loading"></div>
                 <div class="relatedMovies--loading"></div>
+                <div class="relatedMovies--loading"></div>
+                <div class="relatedMovies--loading"></div>
+                <div class="relatedMovies--loading"></div>
+                <div class="relatedMovies--loading"></div>
+                <div class="relatedMovies--loading"></div>
         </article>
     </section>
     
@@ -85,20 +98,12 @@
             <h2 class="liked-title">Películas favoritas</h2>
         </div>
 
-        <article class="liked-movieList">
-        </article>
+        <article class="liked-movieList"></article>
     </section>
-    
-    <footer>Hecho con 💚</footer>
-
-
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./js/nodes.js"></script>
     <script src="./js/main.js"></script>
     <script src="./js/navigation.js"></script>   
-
 </body>
 </html>

@@ -1,17 +1,22 @@
 const API_KEY = "5ad81eac7b8af6924569c3335052e504"
-const token = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1YWQ4MWVhYzdiOGFmNjkyNDU2OWMzMzM1MDUyZTUwNCIsInN1YiI6IjY2NzFjZjJjMmFlMDU4ZmMwOTBlMDNlYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.tItOaiHUKvKfdp4FKoaG_u2Xn3LWuFqYzRlIsKpz2cE'
 
 // Data
+let selectedLanguage = languageSelector.value.startsWith('es') ? 'es-ES' : 'en-US';
+
 const api = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
     params: {
-        'api_key': API_KEY
+        'api_key': API_KEY,
+        'language': selectedLanguage,
     },
     headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
         }
 })
+
+if (languageSelector.value == 'es') {
+    api.params.language = languageSelector.value
+}
 
 //LocalStorage
 const likedMoviesList = () => {
@@ -46,8 +51,7 @@ const likeMovie = (movie) => {
 // Intersection Observer 
 let lazyLoading = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
-        /* console.log("Observador: ", entry.target); */
-        
+
         if (entry.isIntersecting) {
             const img = entry.target
             const url = entry.target.getAttribute('data-img');
@@ -99,7 +103,6 @@ const createMovies = (
         likedMoviesList()[movie.id] && movieBtn.classList.add('movie-btn--liked');
 
         movieBtn.addEventListener('click', (e) =>{ 
-            console.log('le diste like a la peli - se guardará en localstorage');
             e.stopPropagation();
             movieBtn.classList.toggle('movie-btn--liked');
             likeMovie(movie);            
@@ -133,7 +136,6 @@ const createCategories = (categories, container) => {
         categoryTitle.addEventListener('click', () => {
             const categoryName = category.name
             const ubicacion = location.hash = `category=${category.id}-${categoryName.toLowerCase()}`
-            console.log(ubicacion, "location");
             
         })
 
@@ -166,14 +168,13 @@ const getCategoriesPreview = async() => {
        // categoriesPreviewList para usar mas adelante
 };
 
-const getMoviesByCategory = async (id, page = 1) => {
-        const {data} = await api.get(`/discover/movie`, {
+const getMoviesByCategory = async (id, page = 1) => { 
+    const {data} = await api.get(`/discover/movie`, {
             params: {
                 with_genres: id,
                 page
             }
         });
-        console.log(maxPage , "max page desde category");
         const movies = data.results;
         createMovies(movies, genericListSection, {lazyLoad: true});
         maxPage = data.total_pages;
@@ -209,7 +210,6 @@ const getPaginatedMovies = async (
     const { data } = await api(url, {
         params: { page },
     });
-    console.log("data pages", data);
     const movies = data.results;
     createMovies(movies, container, { lazyLoad: true, clean: false });
 }
@@ -221,8 +221,7 @@ const handleInfiniteScroll = (url, container, options) => {
         const pageIsNotMax = page < maxPage;
         
         if (scrollIsBottom && pageIsNotMax) {
-            window.removeEventListener('scroll', infiniteScroll)
-            console.log("llego scroll bottom");
+            window.removeEventListener('scroll', infiniteScroll);
             await getPaginatedMovies(url, container, options, page);
             page++;
             window.addEventListener('scroll', infiniteScroll, {passive: false});
@@ -240,7 +239,7 @@ const getMovieById = async(id) => {
         ),   
         url(${movieImageURL}) no-repeat 
     `;
-    console.log(movie);
+
     movieDetailTitle.textContent = movie.title
     movieDetailDescription.innerHTML = ""
     movieDetailDescription.textContent = movie.overview
@@ -253,7 +252,7 @@ const getMovieById = async(id) => {
 const getRelatedMoviesById = async(id) => {
     const { data } = await fetchData(`/movie/${id}/similar`);
     const relatedMovies = data.results;
-    console.log(relatedMovies, "relacionadas");
+
     createMovies(relatedMovies, relatedMoviesContainer, {lazyLoad: true})
 }
 
@@ -264,22 +263,44 @@ const getLikedMovies = () => {
     createMovies(moviesArray, likedMoviesContainer, {lazyLoad: true, clean: true})
 }
 
-const getLanguages = async () => {
-    try {
-        const res = await fetchData('/configuration/languages')
-        const languagesData = res.data
-
-        languagesData.forEach((lang) => {
-            console.log("idioma:", lang.english_name);
-            
-        })
-        console.log(languagesData);
-        
-
-    } catch (error) {
-        
+const translations = {
+    'en-US': {
+        trending: 'Trending',
+        seeMore: 'See more',
+        categories: 'Categories',
+        favoriteMovies: 'Favorite Movies',
+        similarMovies: 'Similar Movies'
+    },
+    'es-ES': {
+        trending: 'Tendencias',
+        seeMore: 'Ver más',
+        categories: 'Categorías',
+        favoriteMovies: 'Películas favoritas',
+        similarMovies: 'Películas similares'
     }
+};
+
+const updateTexts = (language) => {
+    selector('.trendingPreview-title').textContent = translations[language].trending;
+    selector('.trendingPreview-btn').textContent = translations[language].seeMore;    
+    selector('.categoriesPreview-title').textContent = translations[language].categories;
+    selector('.liked-title').textContent = translations[language].favoriteMovies;
+    selector('.relatedMovies-title').textContent = translations[language].similarMovies;
+
 }
 
+languageSelector.addEventListener('change', (e)=> {
+    const selectedLang = e.target.value;
+    
+    updateTexts(selectedLang)
+} )
+
+languageSelector.addEventListener('change', (e) => {
+    const selectedLang = e.target.value.startsWith('es') ? 'es-ES' : 'en-US';
+    api.defaults.params['language'] = selectedLang;
+    updateTexts(selectedLang);
+    getCategoriesPreview()
+
+});
 
 document.addEventListener('DOMContentLoaded', getLikedMovies);
