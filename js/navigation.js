@@ -70,7 +70,6 @@ const homePage = () => {
     getTrendingMoviesPreview();
     getCategoriesPreview();
     getLikedMovies();
-    getLanguages();
 }
 
 const categoriesPage = () => {

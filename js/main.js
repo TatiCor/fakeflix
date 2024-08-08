@@ -1,5 +1,3 @@
-const API_KEY = "5ad81eac7b8af6924569c3335052e504"
-
 // Data
 let selectedLanguage = languageSelector.value.startsWith('es') ? 'es-ES' : 'en-US';
 
@@ -291,7 +289,7 @@ const updateTexts = (language) => {
 
 languageSelector.addEventListener('change', (e)=> {
     const selectedLang = e.target.value;
-    
+
     updateTexts(selectedLang)
 } )
 

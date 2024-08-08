@@ -72,8 +72,8 @@ h3 {
 .header-title img {
     height: 70px;
     width: 70px;
-
-    margin: 8px;
+    display: block;
+    margin: 0 auto;
 }
 
 .header-title--categoryView {
