@@ -76,18 +76,21 @@ const createMovies = (
         const movieImg = document.createElement('img');
         movieImg.classList.add('movie-img');
         movieImg.setAttribute('alt', movie.title);
-        movieImg.setAttribute(
-            lazyLoad ? 'data-img' : 'src', 
-            `https://image.tmdb.org/t/p/w300${movie.poster_path}`
-        );
+        const posterPath = movie.poster_path ? 
+    `https://image.tmdb.org/t/p/w300${movie.poster_path}` : 
+    '/assets/file-not-found.jpg';
 
+    movieImg.setAttribute(
+        lazyLoad ? 'data-img' : 'src', 
+        posterPath
+    );
         movieImg.addEventListener('click', ()=> {
             location.hash = `#movie=${movie.id}`
         })
         movieImg.addEventListener('error', () => {
             movieImg.setAttribute(
                 'src', 
-                '../assets/file-not-found.jpg'
+                '/assets/file-not-found.jpg'
             );
             const movieTitle = document.createElement('h3');
             movieTitle.classList.add('placeholderImg')
@@ -235,7 +238,7 @@ const getMovieById = async(id) => {
             rgba(0, 0, 0, 0.35) 19.27%,
             rgba(0, 0, 0, 0) 29.17%
         ),   
-        url(${movieImageURL}) no-repeat 
+        url(${movieImageURL}) no-repeat center/cover 
     `;
 
     movieDetailTitle.textContent = movie.title
